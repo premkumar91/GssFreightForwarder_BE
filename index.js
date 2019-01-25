@@ -2,7 +2,8 @@ var nodemailer = require('nodemailer');
 const express = require('express')
 const app = express()
 const port = 5002;
-var bodyParser = require('body-parser')
+const bodyParser = require('body-parser')
+const _ = require('lodash');
 
 var transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -37,15 +38,21 @@ function setDefaultResponseHeader(req, res, next) {
 }
 
 function sendMail(request, response) {
+  if(!_.has(request.body,'contact.message') || !_.has(request.body,'contact.name') || !_.has(request.body,'contact.mail') || !_.has(request.body,'contact.contactNumber')){
+    return response.json({
+      status:"failed",
+      reason:"Either message contact.message , name , mail , phone number missing in payload"
+    })
+  }
   mailOptions.subject = request.body.contact.name + "-" + request.body.contact.mail + "-" + request.body.contact.contactNumber;
   mailOptions.text = request.body.contact.message;
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      response.json({
+      return response.json({
         status: "failed"
       });
     } else {
-      response.json(request.body)
+      return response.json({status:'success'})
     }
   });
 }
