@@ -16,7 +16,7 @@ var transporter = nodemailer.createTransport({
 
 var mailOptions = {
   from: 'gssfreightforwarders.contact@gmail.com',
-  to: 'gssfreightforwarders@gmail.com', //company original mail address  will come here
+  to: 'nisha@gssfreightforwarders.com', //company original mail address  will come here
   subject: 'Sending Email using Node.js',
   text: 'That was easy!'
 };
